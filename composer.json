@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=7.4",
-        "zenmanage/zenmanage-php": "^1.0.0"
+        "zenmanage/zenmanage-php": "^2.0.0"
     },
     "autoload": {
         "psr-4": {

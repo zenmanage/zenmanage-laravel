@@ -3,6 +3,7 @@
 namespace Zenmanage\Laravel\Services;
 
 use Zenmanage\Settings\Request\Entities\Context\Context;
+use Zenmanage\Settings\Response\Entities\Setting;
 use Zenmanage\Laravel\Contracts\Client;
 
 class DirectClient implements Client {
@@ -14,19 +15,32 @@ class DirectClient implements Client {
         $this->client = $client;
     }
 
-    public function all(Context $context = null, array $defaults) : array {
-        try {
-            return $this->client->all($context, $defaults);
-        } catch (\RuntimeException $e) {
-            report($e);
-        }
+    public function withContext(Context $context): Client
+    {
+        $this->client = $this->client->withContext($context);
+        return $this;
+
     }
 
-    public function setting(Context $context = null, string $key, string $type, string|bool|float|int $defaultValue) : \Zenmanage\Settings\Response\Entities\Setting {
-        try {
-            return $this->client->setting($context, $key, $type, $defaultValue);
-        } catch (\RuntimeException $e) {
-            report($e);
-        }
+    public function withDefault(string $key, string $type, string|bool|float|int $defaultValue): Client
+    {
+        $this->client = $this->client->withDefault($key, $type, $defaultValue);
+        return $this;
+    }
+
+    public function connect(): Client
+    {
+        $this->client = $this->client->connect();
+        return $this;
+    }
+
+    public function all(): array
+    {
+        return $this->client->all();
+    }
+
+    public function get(string $key) : ?Setting
+    {
+        return $this->client->get($key);
     }
 }
