@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'environment_token' => env('FLAGGER_ENVIRONMENT_TOKEN')
+    'environment_token' => env('ZENMANAGE_ENVIRONMENT_TOKEN')
 ];
