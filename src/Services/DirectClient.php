@@ -8,39 +8,33 @@ use Zenmanage\Laravel\Contracts\Client;
 
 class DirectClient implements Client {
 
-    private $client;
+    private $zenmanage;
 
-    public function __construct(\Zenmanage\Client $client)
+    public function __construct(\Zenmanage\Zenmanage $zenmanage)
     {
-        $this->client = $client;
+        $this->zenmanage = $zenmanage;
     }
 
     public function withContext(Context $context): Client
     {
-        $this->client = $this->client->withContext($context);
+        $this->zenmanage->flags = $this->zenmanage->flags->withContext($context);
         return $this;
 
     }
 
     public function withDefault(string $key, string $type, string|bool|float|int $defaultValue): Client
     {
-        $this->client = $this->client->withDefault($key, $type, $defaultValue);
-        return $this;
-    }
-
-    public function connect(): Client
-    {
-        $this->client = $this->client->connect();
+        $this->zenmanage->flags = $this->zenmanage->flags->withDefault($key, $type, $defaultValue);
         return $this;
     }
 
     public function all(): array
     {
-        return $this->client->all();
+        return $this->zenmanage->flags->all();
     }
 
     public function get(string $key) : ?Flag
     {
-        return $this->client->get($key);
+        return $this->zenmanage->flags->single($key);
     }
 }
