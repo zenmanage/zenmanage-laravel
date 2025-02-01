@@ -33,7 +33,12 @@ class DirectClient implements Client {
         return $this->zenmanage->flags->all();
     }
 
-    public function get(string $key) : ?Flag
+    public function report(string $key) : void
+    {
+        $this->zenmanage->flags->report($key);
+    }
+
+    public function single(string $key) : ?Flag
     {
         return $this->zenmanage->flags->single($key);
     }
