@@ -12,16 +12,100 @@ This library can be installed via [Composer](https://getcomposer.org):
 composer require zenmanage/zenmanage-laravel
 ```
 
+**Publish the config**
+
+Run the following command to publish the package config file:
+
+```bash
+php artisan vendor:publish --provider="Zenmanage\Laravel\ZenmanageServiceProvider"
+```
+
+You should now have a config/zenmanage.php file that allows you to configure the basics of this package.
+
 ## Configuration
 
 The only required configuration is the Environment Token. You can get your Environment Token via the [Project settings](https://app.zenmanage.com/admin/projects) in your Zenmanage account.
 
-Configuration values can be set when creating a new API client or via environment variables. The environment takes precedence over values provided during the initialization process.
-
-**Configuration via environment variables**
+Configuration values are set in the config/zenmanage.php file.
 
 ```bash
 ZENMANAGE_ENVIRONMENT_TOKEN=tok_sample
+```
+
+## Context
+
+When retrieving values for feature flags, a context can be provided that can change the value based on unique attributes of the context.
+
+```php
+use \Zenmanage\Flags\Request\Entities\Context\Attribute;
+use \Zenmanage\Flags\Request\Entities\Context\Context;
+use \Zenmanage\Flags\Request\Entities\Context\Value;
+use \Zenmanage\Laravel\Contracts\DirectClient as Client;
+
+$context = new Context('user', 'John Doe', 'id-123', [
+    new Attribute('company', [
+        new Value('JD, Inc.'),
+    ]),
+]);
+
+$zenmanage = (new Client())
+    ->withContext($context);
+```
+
+## Default Values
+
+When retrieving values for feature flags, a default value will be returned to the application if the Zenmanage API is unavailable or responds incorrectly. This will ensure your app will still function in the event that a flag cannot be evaluated.
+
+```php
+use \Zenmanage\Laravel\Contracts\DirectClient as Client;
+
+$zenmanage = (new Client())
+    ->withDefault('flag-key', 'boolean', false);
+
+```
+
+## Retrieving a Feature Flag Value
+
+Before retrieving a feature flag, create a new instance of Zenmanage. If you configured your environment token key via environment variables there's nothing to add. Otherwise, see the example above.
+
+```php
+use \Zenmanage\Laravel\Contracts\DirectClient as Client;
+
+$zenmanage = new Client();
+```
+
+### Retrieving Flags
+
+#### All Flags
+
+```php
+$results = $zenmanage->all();
+
+foreach ($results as $results) {
+    $key = $result->key;
+    $name = $result->name;
+    $type = $result->type;
+    $value = $result->value
+}
+```
+
+#### Single Flag
+
+```php
+$result = $zenmanage->single('flag-key');
+
+$key = $result->key;
+$name = $result->name;
+$type = $result->type;
+$value = $result->value
+```
+
+## Reporting Feature Flag Usage
+
+When your application uses a feature flag, it can notify Zenmanage of the usage. This helps Zenmanage determine which flags are active and which may have been abandoned.
+
+```php
+$zenmanage->report('flag-key');
 ```
 
 ## Contributing
