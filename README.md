@@ -40,7 +40,7 @@ When retrieving values for feature flags, a context can be provided that can cha
 use \Zenmanage\Flags\Request\Entities\Context\Attribute;
 use \Zenmanage\Flags\Request\Entities\Context\Context;
 use \Zenmanage\Flags\Request\Entities\Context\Value;
-use \Zenmanage\Laravel\Contracts\DirectClient as Client;
+use \Zenmanage\Laravel\Services\DirectClient as Client;
 
 $context = new Context('user', 'John Doe', 'id-123', [
     new Attribute('company', [
@@ -57,7 +57,7 @@ $zenmanage = (new Client())
 When retrieving values for feature flags, a default value will be returned to the application if the Zenmanage API is unavailable or responds incorrectly. This will ensure your app will still function in the event that a flag cannot be evaluated.
 
 ```php
-use \Zenmanage\Laravel\Contracts\DirectClient as Client;
+use \Zenmanage\Laravel\Services\DirectClient as Client;
 
 $zenmanage = (new Client())
     ->withDefault('flag-key', 'boolean', false);
@@ -69,7 +69,7 @@ $zenmanage = (new Client())
 Before retrieving a feature flag, create a new instance of Zenmanage. If you configured your environment token key via environment variables there's nothing to add. Otherwise, see the example above.
 
 ```php
-use \Zenmanage\Laravel\Contracts\DirectClient as Client;
+use \Zenmanage\Laravel\Services\DirectClient as Client;
 
 $zenmanage = new Client();
 ```
