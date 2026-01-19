@@ -1,6 +1,6 @@
 # Zenmanage Laravel SDK
 
-[![Build Status](https://github.com/zenmanage/zenmanage-laravel/actions/workflows/tests.yml/badge.svg)](https://github.com/zenmanage/zenmanage-laravel) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=zenmanage_zenmanage-laravel&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=zenmanage_zenmanage-laravel)
+[![Build Status](https://github.com/zenmanage/zenmanage-laravel/actions/workflows/ci.yml/badge.svg)](https://github.com/zenmanage/zenmanage-laravel) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=zenmanage_zenmanage-laravel&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=zenmanage_zenmanage-laravel)
 
 Add feature flags to your Laravel application in minutes. Control feature rollouts, A/B test, and manage configurations without deploying code.
 
