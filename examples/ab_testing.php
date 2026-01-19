@@ -6,7 +6,7 @@ use Zenmanage\Flags\Context\Attribute;
 use Zenmanage\Flags\Context\Context;
 use Zenmanage\Laravel\Facades\Zenmanage;
 
-/**
+/*
  * A/B Testing with Flags + Context (Laravel Facade)
  *
  * Evaluates a string variant flag using user context and a deterministic
@@ -21,6 +21,7 @@ echo "=== A/B Testing Example (Laravel Facade) ===\n\n";
 function abBucket(string $identifier): int
 {
     $hash = crc32($identifier);
+
     return (int) ($hash % 100);
 }
 
@@ -42,7 +43,8 @@ function evaluateVariant(string $userId, string $userName): void
     );
 
     $variantFlag = Zenmanage::withContext($context)
-        ->single('landing-page-variant', 'control');
+        ->single('landing-page-variant', 'control')
+    ;
 
     $variant = $variantFlag->asString();
 

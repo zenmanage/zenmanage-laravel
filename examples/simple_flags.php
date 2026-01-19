@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Zenmanage\Laravel\Facades\Zenmanage;
 
-/**
+/*
  * Simple Flag Operations (Laravel Facade)
  *
  * Demonstrates basic flag retrieval and type-safe value access via the
@@ -17,10 +17,10 @@ echo "=== Simple Flag Operations (Laravel Facade) ===\n\n";
 echo "1. Boolean Flags\n\n";
 
 $boolFlag = Zenmanage::single('example-boolean-flag');
-echo "   Boolean Flag: " . ($boolFlag->asBool() ? 'true' : 'false') . "\n";
+echo '   Boolean Flag: '.($boolFlag->asBool() ? 'true' : 'false')."\n";
 
 $enabledFlag = Zenmanage::single('example-feature-enabled');
-echo "   Feature Enabled: " . ($enabledFlag->isEnabled() ? 'Yes' : 'No') . "\n\n";
+echo '   Feature Enabled: '.($enabledFlag->isEnabled() ? 'Yes' : 'No')."\n\n";
 
 // String flags
 echo "2. String Flags\n\n";
@@ -44,12 +44,12 @@ echo "   Limit Flag: {$limitFlag->asNumber()}\n\n";
 echo "4. Retrieving All Flags\n\n";
 
 $flags = Zenmanage::all();
-echo "   Total flags: " . count($flags) . "\n\n";
+echo '   Total flags: '.count($flags)."\n\n";
 
 foreach ($flags as $flag) {
     echo "   - {$flag->getKey()} ({$flag->getType()}): ";
 
-    if ($flag->getType() === 'boolean') {
+    if ('boolean' === $flag->getType()) {
         echo $flag->isEnabled() ? 'enabled' : 'disabled';
     } else {
         echo $flag->getValue();
@@ -65,7 +65,7 @@ $flag = Zenmanage::single('example-number-flag');
 echo "   getValue(): {$flag->getValue()}\n";
 echo "   asString(): {$flag->asString()}\n";
 echo "   asNumber(): {$flag->asNumber()}\n";
-echo "   asBool(): " . ($flag->asBool() ? 'true' : 'false') . "\n";
-echo "   isEnabled(): " . ($flag->isEnabled() ? 'true' : 'false') . "\n\n";
+echo '   asBool(): '.($flag->asBool() ? 'true' : 'false')."\n";
+echo '   isEnabled(): '.($flag->isEnabled() ? 'true' : 'false')."\n\n";
 
 echo "Examples completed!\n";
