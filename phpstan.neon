@@ -1,0 +1,28 @@
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+    level: 9
+    paths:
+        - src
+        - tests
+
+    reportUnmatchedIgnoredErrors: false
+
+    ignoreErrors:
+        # Laravel framework - these are expected to not be found without Laravel installed
+        - '#Call to an undefined method Zenmanage\\Laravel\\ZenmanageServiceProvider::publishes#'
+        - '#Call to an undefined method Zenmanage\\Laravel\\ZenmanageServiceProvider::mergeConfigFrom#'
+        - '#Access to an undefined property Zenmanage\\Laravel\\ZenmanageServiceProvider::\$app#'
+        # Mock methods in tests
+        - '#Call to an undefined method Zenmanage\\Flags\\FlagManagerInterface::expects#'
+        # PHPUnit test assertions
+        - '#Call to method PHPUnit\\Framework\\Assert::assertTrue\(\) with true#'
+
+    excludePaths:
+        # Facades and service providers inherit from Laravel framework
+        - src/Facades/Zenmanage.php
+        - src/ZenmanageServiceProvider.php
+        # Tests for Laravel framework integration
+        - tests/Facades/ZenmanageFacadeTest.php
+        - tests/ZenmanageServiceProviderTest.php

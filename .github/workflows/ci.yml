@@ -1,0 +1,47 @@
+name: ZENMANAGE-LARAVEL SDK CI
+
+on:
+  push:
+  pull_request:
+
+obs:
+  test:
+    name: Test & Quality (PHP ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.1', '8.2', '8.3']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: xdebug
+          tools: composer
+          ini-values: memory_limit=-1
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Run tests
+        run: composer test
+
+      - name: Run tests with coverage
+        run: composer test:coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-php-${{ matrix.php-version }}
+          path: coverage
+
+      - name: Static analysis
+        run: composer analyze
+
+      - name: Code style check
+        run: composer format:check
