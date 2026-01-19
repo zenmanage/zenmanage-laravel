@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
 
-obs:
+jobs:
   test:
     name: Test & Quality (PHP ${{ matrix.php-version }})
     runs-on: ubuntu-latest
