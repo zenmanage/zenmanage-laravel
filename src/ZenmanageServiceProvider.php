@@ -58,7 +58,7 @@ class ZenmanageServiceProvider extends ServiceProvider
                     cacheTtl: $config['cache_ttl'] ?? 3600,
                     cacheBackend: $config['cache_backend'] ?? 'memory',
                     cacheDirectory: $config['cache_directory'] ?? null,
-                    enableUsageReporting: $config['enable_usage_reporting'] ?? false,
+                    enableUsageReporting: $config['enable_usage_reporting'] ?? true,
                     apiEndpoint: $config['api_endpoint'] ?? 'https://api.zenmanage.com',
                 )
             );
