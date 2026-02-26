@@ -16,6 +16,7 @@ php artisan tinker --execute "require base_path('vendor/zenmanage/zenmanage-lara
 php artisan tinker --execute "require base_path('vendor/zenmanage/zenmanage-laravel/examples/defaults.php');"
 php artisan tinker --execute "require base_path('vendor/zenmanage/zenmanage-laravel/examples/caching.php');"
 php artisan tinker --execute "require base_path('vendor/zenmanage/zenmanage-laravel/examples/ab_testing.php');"
+php artisan tinker --execute "require base_path('vendor/zenmanage/zenmanage-laravel/examples/percentage_rollouts.php');"
 ```
 
 Feel free to copy the snippets into your controllers, jobs, or tests.
@@ -32,3 +33,5 @@ Feel free to copy the snippets into your controllers, jobs, or tests.
    - Configure cache backend/TTL and refresh rules via config/env.
 5. `ab_testing.php`
    - A/B variant evaluation using a deterministic bucket attribute.
+6. `percentage_rollouts.php`
+   - SDK-side percentage rollouts with automatic CRC32B bucketing.
