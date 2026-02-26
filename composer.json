@@ -9,15 +9,6 @@
             "email": "hello@zenmanage.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../zenmanage-php",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "require": {
         "php": ">=8.1",
         "zenmanage/zenmanage-php": "^3.3.0"
