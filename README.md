@@ -21,6 +21,11 @@ composer require zenmanage/zenmanage-laravel
 
 **Requirements**: Laravel 11+, PHP 8.1+
 
+## Key Compatibility
+
+- Supported: case-sensitive server keys prefixed with `srv_`
+- Not supported in Laravel SDK: client keys (`cli_`) and mobile keys (`mob_`) (initialization fails fast)
+
 The service provider will be auto-discovered. If you need to manually publish the config:
 
 ```bash
@@ -29,11 +34,11 @@ php artisan vendor:publish --provider="Zenmanage\Laravel\ZenmanageServiceProvide
 
 ## Get Started in 60 Seconds
 
-1. Get your environment token from [zenmanage.com](https://zenmanage.com)
+1. Get your server key (`srv_...`) from [zenmanage.com](https://zenmanage.com)
 2. Set your token in `.env`:
 
 ```env
-ZENMANAGE_TOKEN=tok_your_token_here
+ZENMANAGE_ENVIRONMENT_TOKEN=srv_your_server_key_here
 ```
 
 3. Check a feature flag:
@@ -52,9 +57,9 @@ That's it! 🎉
 
 ## Configuration
 
-The only required configuration is the Environment Token. Configuration values are set in `config/zenmanage.php`:
+The only required configuration is the Environment Token (server key prefixed with `srv_`). Configuration values are set in `config/zenmanage.php`:
 
-- `environment_token` - Your Zenmanage environment token (required)
+- `environment_token` - Your Zenmanage server key (`srv_...`) (required)
 - `cache_ttl` - Cache duration in seconds (default: 3600)
 - `cache_backend` - Cache strategy: 'memory' or 'filesystem' (default: 'memory')
 - `cache_directory` - Directory for filesystem cache (optional)
@@ -62,7 +67,7 @@ The only required configuration is the Environment Token. Configuration values a
 - `api_endpoint` - API endpoint URL (default: https://api.zenmanage.com)
 
 ```env
-ZENMANAGE_TOKEN=tok_sample
+ZENMANAGE_ENVIRONMENT_TOKEN=srv_sample
 ZENMANAGE_CACHE_BACKEND=filesystem
 ZENMANAGE_CACHE_TTL=3600
 ZENMANAGE_USAGE_REPORTING=false
