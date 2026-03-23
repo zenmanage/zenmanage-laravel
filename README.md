@@ -66,6 +66,10 @@ The only required configuration is the Environment Token (server key prefixed wi
 - `enable_usage_reporting` - Enable automatic usage tracking (default: false)
 - `api_endpoint` - API endpoint URL (default: https://api.zenmanage.com)
 
+The SDK client metadata is set automatically and is not configurable via environment:
+- `client_agent` is hard-coded to `zenmanage-laravel`
+- `sdk_version` is read from this package's Composer version metadata
+
 ```env
 ZENMANAGE_ENVIRONMENT_TOKEN=srv_sample
 ZENMANAGE_CACHE_BACKEND=filesystem

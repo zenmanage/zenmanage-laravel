@@ -66,4 +66,5 @@ return [
     |
     */
     'api_endpoint' => env('ZENMANAGE_API_ENDPOINT', 'https://api.zenmanage.com'),
+
 ];

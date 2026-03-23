@@ -18,6 +18,8 @@ use Zenmanage\Zenmanage;
  */
 class ZenmanageServiceProvider extends ServiceProvider
 {
+    private const LARAVEL_CLIENT_AGENT = 'zenmanage-laravel';
+
     /**
      * @var array<class-string, class-string>
      */
@@ -52,18 +54,68 @@ class ZenmanageServiceProvider extends ServiceProvider
         $this->app->singleton(Zenmanage::class, function () {
             $config = config('zenmanage');
 
+            $configArgs = [
+                'environmentToken' => $config['environment_token'] ?? '',
+                'cacheTtl' => (int) ($config['cache_ttl'] ?? 3600),
+                'cacheBackend' => $config['cache_backend'] ?? 'memory',
+                'cacheDirectory' => $config['cache_directory'] ?? null,
+                'enableUsageReporting' => (bool) ($config['enable_usage_reporting'] ?? true),
+                'apiEndpoint' => $config['api_endpoint'] ?? 'https://api.zenmanage.com',
+            ];
+
+            $sdkVersion = $this->resolveLaravelSdkVersion();
+            if (is_string($sdkVersion) && $sdkVersion !== '' && $this->supportsConfigArgument('sdkVersion')) {
+                $configArgs['sdkVersion'] = $sdkVersion;
+            }
+
+            if ($this->supportsConfigArgument('clientAgent')) {
+                $configArgs['clientAgent'] = self::LARAVEL_CLIENT_AGENT;
+            }
+
             return new Zenmanage(
-                new Config(
-                    environmentToken: $config['environment_token'] ?? '',
-                    cacheTtl: $config['cache_ttl'] ?? 3600,
-                    cacheBackend: $config['cache_backend'] ?? 'memory',
-                    cacheDirectory: $config['cache_directory'] ?? null,
-                    enableUsageReporting: $config['enable_usage_reporting'] ?? true,
-                    apiEndpoint: $config['api_endpoint'] ?? 'https://api.zenmanage.com',
-                )
+                new Config(...$configArgs)
             );
         });
 
         $this->app->singleton(FlagManagerInterface::class, fn () => $this->app->make(Zenmanage::class)->flags());
+    }
+
+    private function resolveLaravelSdkVersion(): ?string
+    {
+        if (!class_exists(\Composer\InstalledVersions::class)) {
+            return null;
+        }
+
+        try {
+            if (!\Composer\InstalledVersions::isInstalled('zenmanage/zenmanage-laravel')) {
+                return null;
+            }
+
+            $version = \Composer\InstalledVersions::getPrettyVersion('zenmanage/zenmanage-laravel');
+
+            return is_string($version) && $version !== '' ? $version : null;
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    private function supportsConfigArgument(string $argumentName): bool
+    {
+        static $supportedArguments = null;
+
+        if ($supportedArguments === null) {
+            $constructor = (new \ReflectionClass(Config::class))->getConstructor();
+
+            if ($constructor === null) {
+                $supportedArguments = [];
+            } else {
+                $supportedArguments = array_map(
+                    static fn (\ReflectionParameter $parameter): string => $parameter->getName(),
+                    $constructor->getParameters(),
+                );
+            }
+        }
+
+        return in_array($argumentName, $supportedArguments, true);
     }
 }
