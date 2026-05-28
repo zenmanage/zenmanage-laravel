@@ -69,7 +69,6 @@ class ZenmanageServiceProviderTest extends TestCase
 
         $provider = new ZenmanageServiceProvider($this->createMock(Application::class));
         $method = new ReflectionMethod($provider, 'resolveLaravelSdkVersion');
-        $method->setAccessible(true);
 
         $version = $method->invoke($provider);
 

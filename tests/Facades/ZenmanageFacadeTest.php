@@ -21,7 +21,6 @@ class ZenmanageFacadeTest extends TestCase
 
         $reflection = new ReflectionClass(Zenmanage::class);
         $method = $reflection->getMethod('getFacadeAccessor');
-        $method->setAccessible(true);
 
         $result = $method->invoke(null);
 
