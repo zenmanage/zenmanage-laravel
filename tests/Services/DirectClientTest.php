@@ -132,96 +132,6 @@ class DirectClientTest extends TestCase
         $this->assertTrue(true); // If no exception, test passes
     }
 
-    // -------------------------------------------------------------------------
-    // Context fixtures
-    // -------------------------------------------------------------------------
-
-    private function c1(): Context
-    {
-        return new Context('user', 'Alice US Free', 'user-us-free', [
-            new Attribute('country', ['US']),
-            new Attribute('plan', ['free']),
-            new Attribute('age', ['25']),
-            new Attribute('email', ['alice@acme.com']),
-            new Attribute('tier', ['1']),
-            new Attribute('tags', ['alpha', 'beta']),
-        ]);
-    }
-
-    private function c2(): Context
-    {
-        return new Context('user', 'Bob CA Pro', 'user-ca-pro', [
-            new Attribute('country', ['CA']),
-            new Attribute('plan', ['pro']),
-            new Attribute('age', ['42']),
-            new Attribute('email', ['bob@acme.ca']),
-            new Attribute('tier', ['3']),
-            new Attribute('tags', ['beta', 'gamma']),
-        ]);
-    }
-
-    private function c5(): Context
-    {
-        return new Context('user', 'Shared User', 'shared-123', [
-            new Attribute('country', ['US']),
-        ]);
-    }
-
-    private function c6(): Context
-    {
-        return new Context('organization', 'Shared Org', 'shared-123', [
-            new Attribute('country', ['US']),
-        ]);
-    }
-
-    // -------------------------------------------------------------------------
-    // Flag factory helpers
-    // -------------------------------------------------------------------------
-
-    private function makeBoolFlag(string $key, bool $value): Flag
-    {
-        $ruleValue = new RuleValue('v1', ['boolean' => $value]);
-        $target = new Target('tar_1', null, null, null, $ruleValue);
-
-        return new Flag('fla_1', 'boolean', $key, $key, $target, []);
-    }
-
-    private function makeStringFlag(string $key, string $value): Flag
-    {
-        $ruleValue = new RuleValue('v1', ['string' => $value]);
-        $target = new Target('tar_1', null, null, null, $ruleValue);
-
-        return new Flag('fla_1', 'string', $key, $key, $target, []);
-    }
-
-    private function makeNumberFlag(string $key, int|float $value): Flag
-    {
-        $ruleValue = new RuleValue('v1', ['number' => $value]);
-        $target = new Target('tar_1', null, null, null, $ruleValue);
-
-        return new Flag('fla_1', 'number', $key, $key, $target, []);
-    }
-
-    // -------------------------------------------------------------------------
-    // Helper: expect withContext()->single()
-    // -------------------------------------------------------------------------
-
-    private function expectContextThenSingle(Context $context, string $key, mixed $default, Flag $flag): void
-    {
-        $contextManager = $this->createMock(FlagManagerInterface::class);
-        $contextManager->expects($this->once())
-            ->method('single')
-            ->with($key, $default)
-            ->willReturn($flag)
-        ;
-
-        $this->flagManagerMock->expects($this->once())
-            ->method('withContext')
-            ->with($context)
-            ->willReturn($contextManager)
-        ;
-    }
-
     // =========================================================================
     // Static value passthrough (bool false, string, number)
     // =========================================================================
@@ -693,5 +603,95 @@ class DirectClientTest extends TestCase
         $flag = $this->client->withContext($c2)->single('parity-ctx-not-equals', false);
 
         $this->assertFalse($flag->asBool());
+    }
+
+    // -------------------------------------------------------------------------
+    // Context fixtures
+    // -------------------------------------------------------------------------
+
+    private function c1(): Context
+    {
+        return new Context('user', 'Alice US Free', 'user-us-free', [
+            new Attribute('country', ['US']),
+            new Attribute('plan', ['free']),
+            new Attribute('age', ['25']),
+            new Attribute('email', ['alice@acme.com']),
+            new Attribute('tier', ['1']),
+            new Attribute('tags', ['alpha', 'beta']),
+        ]);
+    }
+
+    private function c2(): Context
+    {
+        return new Context('user', 'Bob CA Pro', 'user-ca-pro', [
+            new Attribute('country', ['CA']),
+            new Attribute('plan', ['pro']),
+            new Attribute('age', ['42']),
+            new Attribute('email', ['bob@acme.ca']),
+            new Attribute('tier', ['3']),
+            new Attribute('tags', ['beta', 'gamma']),
+        ]);
+    }
+
+    private function c5(): Context
+    {
+        return new Context('user', 'Shared User', 'shared-123', [
+            new Attribute('country', ['US']),
+        ]);
+    }
+
+    private function c6(): Context
+    {
+        return new Context('organization', 'Shared Org', 'shared-123', [
+            new Attribute('country', ['US']),
+        ]);
+    }
+
+    // -------------------------------------------------------------------------
+    // Flag factory helpers
+    // -------------------------------------------------------------------------
+
+    private function makeBoolFlag(string $key, bool $value): Flag
+    {
+        $ruleValue = new RuleValue('v1', ['boolean' => $value]);
+        $target = new Target('tar_1', null, null, null, $ruleValue);
+
+        return new Flag('fla_1', 'boolean', $key, $key, $target, []);
+    }
+
+    private function makeStringFlag(string $key, string $value): Flag
+    {
+        $ruleValue = new RuleValue('v1', ['string' => $value]);
+        $target = new Target('tar_1', null, null, null, $ruleValue);
+
+        return new Flag('fla_1', 'string', $key, $key, $target, []);
+    }
+
+    private function makeNumberFlag(string $key, float|int $value): Flag
+    {
+        $ruleValue = new RuleValue('v1', ['number' => $value]);
+        $target = new Target('tar_1', null, null, null, $ruleValue);
+
+        return new Flag('fla_1', 'number', $key, $key, $target, []);
+    }
+
+    // -------------------------------------------------------------------------
+    // Helper: expect withContext()->single()
+    // -------------------------------------------------------------------------
+
+    private function expectContextThenSingle(Context $context, string $key, mixed $default, Flag $flag): void
+    {
+        $contextManager = $this->createMock(FlagManagerInterface::class);
+        $contextManager->expects($this->once())
+            ->method('single')
+            ->with($key, $default)
+            ->willReturn($flag)
+        ;
+
+        $this->flagManagerMock->expects($this->once())
+            ->method('withContext')
+            ->with($context)
+            ->willReturn($contextManager)
+        ;
     }
 }

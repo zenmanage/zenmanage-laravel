@@ -39,7 +39,7 @@ class ZenmanageServiceProvider extends ServiceProvider
         $this->mergeConfigFrom($configPath, 'zenmanage');
 
         // Register the Zenmanage facade alias
-        if (class_exists(AliasLoader::class) === true) {
+        if (true === class_exists(AliasLoader::class)) {
             AliasLoader::getInstance()->alias(
                 'Zenmanage',
                 Facades\Zenmanage::class
@@ -65,11 +65,11 @@ class ZenmanageServiceProvider extends ServiceProvider
             ];
 
             $sdkVersion = $this->resolveLaravelSdkVersion();
-            if (is_string($sdkVersion) === true && '' !== $sdkVersion && $this->supportsConfigArgument('sdkVersion') === true) {
+            if (true === is_string($sdkVersion) && '' !== $sdkVersion && true === $this->supportsConfigArgument('sdkVersion')) {
                 $configArgs['sdkVersion'] = $sdkVersion;
             }
 
-            if ($this->supportsConfigArgument('clientAgent') === true) {
+            if (true === $this->supportsConfigArgument('clientAgent')) {
                 $configArgs['clientAgent'] = self::LARAVEL_CLIENT_AGENT;
             }
 
@@ -83,12 +83,12 @@ class ZenmanageServiceProvider extends ServiceProvider
 
     private function resolveLaravelSdkVersion(): ?string
     {
-        if (class_exists(InstalledVersions::class) === false) {
+        if (false === class_exists(InstalledVersions::class)) {
             return null;
         }
 
         try {
-            if (InstalledVersions::isInstalled('zenmanage/zenmanage-laravel') === false) {
+            if (false === InstalledVersions::isInstalled('zenmanage/zenmanage-laravel')) {
                 return null;
             }
 

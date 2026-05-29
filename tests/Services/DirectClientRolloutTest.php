@@ -33,79 +33,6 @@ class DirectClientRolloutTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
-    // Context fixtures
-    // -------------------------------------------------------------------------
-
-    private function c1(): Context
-    {
-        return new Context('user', 'Alice US Free', 'user-us-free', [
-            new Attribute('country', ['US']),
-            new Attribute('plan', ['free']),
-        ]);
-    }
-
-    private function c2(): Context
-    {
-        return new Context('user', 'Bob CA Pro', 'user-ca-pro', [
-            new Attribute('country', ['CA']),
-            new Attribute('plan', ['pro']),
-        ]);
-    }
-
-    private function c3(): Context
-    {
-        return new Context('user', 'Rollout Candidate A', 'user-rollout-a', [
-            new Attribute('country', ['US']),
-            new Attribute('plan', ['free']),
-        ]);
-    }
-
-    private function c4(): Context
-    {
-        return new Context('user', 'Rollout Candidate B', 'user-rollout-b', [
-            new Attribute('country', ['US']),
-            new Attribute('plan', ['free']),
-        ]);
-    }
-
-    private function c7(): Context
-    {
-        return new Context('anonymous', null, null);
-    }
-
-    // -------------------------------------------------------------------------
-    // Flag factory helper
-    // -------------------------------------------------------------------------
-
-    private function makeBoolFlagResult(string $key, bool $value): Flag
-    {
-        $ruleValue = new RuleValue('v1', ['boolean' => $value]);
-        $target = new Target('tar_1', null, null, null, $ruleValue);
-
-        return new Flag('fla_1', 'boolean', $key, $key, $target, []);
-    }
-
-    // -------------------------------------------------------------------------
-    // Helper: expect withContext()->single()
-    // -------------------------------------------------------------------------
-
-    private function expectContextThenSingle(Context $context, string $key, mixed $default, Flag $flag): void
-    {
-        $contextManager = $this->createMock(FlagManagerInterface::class);
-        $contextManager->expects($this->once())
-            ->method('single')
-            ->with($key, $default)
-            ->willReturn($flag)
-        ;
-
-        $this->flagManagerMock->expects($this->once())
-            ->method('withContext')
-            ->with($context)
-            ->willReturn($contextManager)
-        ;
-    }
-
-    // -------------------------------------------------------------------------
     // Rollout classes are available (dependency check)
     // -------------------------------------------------------------------------
 
@@ -389,5 +316,78 @@ class DirectClientRolloutTest extends TestCase
         $flag = $this->client->withContext($c1)->single('parity-rollout-complete', false);
 
         $this->assertTrue($flag->asBool());
+    }
+
+    // -------------------------------------------------------------------------
+    // Context fixtures
+    // -------------------------------------------------------------------------
+
+    private function c1(): Context
+    {
+        return new Context('user', 'Alice US Free', 'user-us-free', [
+            new Attribute('country', ['US']),
+            new Attribute('plan', ['free']),
+        ]);
+    }
+
+    private function c2(): Context
+    {
+        return new Context('user', 'Bob CA Pro', 'user-ca-pro', [
+            new Attribute('country', ['CA']),
+            new Attribute('plan', ['pro']),
+        ]);
+    }
+
+    private function c3(): Context
+    {
+        return new Context('user', 'Rollout Candidate A', 'user-rollout-a', [
+            new Attribute('country', ['US']),
+            new Attribute('plan', ['free']),
+        ]);
+    }
+
+    private function c4(): Context
+    {
+        return new Context('user', 'Rollout Candidate B', 'user-rollout-b', [
+            new Attribute('country', ['US']),
+            new Attribute('plan', ['free']),
+        ]);
+    }
+
+    private function c7(): Context
+    {
+        return new Context('anonymous', null, null);
+    }
+
+    // -------------------------------------------------------------------------
+    // Flag factory helper
+    // -------------------------------------------------------------------------
+
+    private function makeBoolFlagResult(string $key, bool $value): Flag
+    {
+        $ruleValue = new RuleValue('v1', ['boolean' => $value]);
+        $target = new Target('tar_1', null, null, null, $ruleValue);
+
+        return new Flag('fla_1', 'boolean', $key, $key, $target, []);
+    }
+
+    // -------------------------------------------------------------------------
+    // Helper: expect withContext()->single()
+    // -------------------------------------------------------------------------
+
+    private function expectContextThenSingle(Context $context, string $key, mixed $default, Flag $flag): void
+    {
+        $contextManager = $this->createMock(FlagManagerInterface::class);
+        $contextManager->expects($this->once())
+            ->method('single')
+            ->with($key, $default)
+            ->willReturn($flag)
+        ;
+
+        $this->flagManagerMock->expects($this->once())
+            ->method('withContext')
+            ->with($context)
+            ->willReturn($contextManager)
+        ;
     }
 }

@@ -15,7 +15,7 @@ class ZenmanageFacadeTest extends TestCase
 {
     public function testGetFacadeAccessorReturnsClientClass(): void
     {
-        if (class_exists('\Illuminate\Support\Facades\Facade') === false) {
+        if (false === class_exists('\Illuminate\Support\Facades\Facade')) {
             $this->markTestSkipped('Laravel Facade class not available');
         }
 

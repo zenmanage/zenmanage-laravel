@@ -17,7 +17,7 @@ class ZenmanageServiceProviderTest extends TestCase
 {
     public function testRegisterBindsZenmanageToContainer(): void
     {
-        if (class_exists('\Illuminate\Support\ServiceProvider') === false) {
+        if (false === class_exists('\Illuminate\Support\ServiceProvider')) {
             $this->markTestSkipped('Laravel ServiceProvider class not available');
         }
 
@@ -32,7 +32,7 @@ class ZenmanageServiceProviderTest extends TestCase
 
     public function testBindingsArrayContainsCorrectMappings(): void
     {
-        if (class_exists('\Illuminate\Support\ServiceProvider') === false) {
+        if (false === class_exists('\Illuminate\Support\ServiceProvider')) {
             $this->markTestSkipped('Laravel ServiceProvider class not available');
         }
 
@@ -63,7 +63,7 @@ class ZenmanageServiceProviderTest extends TestCase
 
     public function testResolveLaravelSdkVersionReturnsNullOrString(): void
     {
-        if (class_exists('\Illuminate\Support\ServiceProvider') === false) {
+        if (false === class_exists('\Illuminate\Support\ServiceProvider')) {
             $this->markTestSkipped('Laravel ServiceProvider class not available');
         }
 
@@ -73,7 +73,7 @@ class ZenmanageServiceProviderTest extends TestCase
         $version = $method->invoke($provider);
 
         $this->assertTrue(null === $version || is_string($version));
-        if (is_string($version) === true) {
+        if (true === is_string($version)) {
             $this->assertNotSame('', $version);
         }
     }
