@@ -45,7 +45,7 @@ class ZenmanageServiceProviderTest extends TestCase
 
     public function testPublishedConfigDoesNotContainClientMetadataKeys(): void
     {
-        $configContents = file_get_contents(__DIR__ . '/../config/zenmanage.php');
+        $configContents = file_get_contents(__DIR__.'/../config/zenmanage.php');
 
         $this->assertIsString($configContents);
         $this->assertStringNotContainsString("'client_agent'", $configContents);
@@ -54,7 +54,7 @@ class ZenmanageServiceProviderTest extends TestCase
 
     public function testProviderHardCodesClientAgent(): void
     {
-        $providerContents = file_get_contents(__DIR__ . '/../src/ZenmanageServiceProvider.php');
+        $providerContents = file_get_contents(__DIR__.'/../src/ZenmanageServiceProvider.php');
 
         $this->assertIsString($providerContents);
         $this->assertStringContainsString("private const LARAVEL_CLIENT_AGENT = 'zenmanage-laravel';", $providerContents);
@@ -72,7 +72,7 @@ class ZenmanageServiceProviderTest extends TestCase
 
         $version = $method->invoke($provider);
 
-        $this->assertTrue($version === null || is_string($version));
+        $this->assertTrue(null === $version || is_string($version));
         if (is_string($version)) {
             $this->assertNotSame('', $version);
         }

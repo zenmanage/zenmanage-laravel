@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zenmanage\Laravel;
 
+use Composer\InstalledVersions;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Zenmanage\Config\Config;
@@ -64,7 +65,7 @@ class ZenmanageServiceProvider extends ServiceProvider
             ];
 
             $sdkVersion = $this->resolveLaravelSdkVersion();
-            if (is_string($sdkVersion) && $sdkVersion !== '' && $this->supportsConfigArgument('sdkVersion')) {
+            if (is_string($sdkVersion) && '' !== $sdkVersion && $this->supportsConfigArgument('sdkVersion')) {
                 $configArgs['sdkVersion'] = $sdkVersion;
             }
 
@@ -82,18 +83,18 @@ class ZenmanageServiceProvider extends ServiceProvider
 
     private function resolveLaravelSdkVersion(): ?string
     {
-        if (!class_exists(\Composer\InstalledVersions::class)) {
+        if (!class_exists(InstalledVersions::class)) {
             return null;
         }
 
         try {
-            if (!\Composer\InstalledVersions::isInstalled('zenmanage/zenmanage-laravel')) {
+            if (!InstalledVersions::isInstalled('zenmanage/zenmanage-laravel')) {
                 return null;
             }
 
-            $version = \Composer\InstalledVersions::getPrettyVersion('zenmanage/zenmanage-laravel');
+            $version = InstalledVersions::getPrettyVersion('zenmanage/zenmanage-laravel');
 
-            return is_string($version) && $version !== '' ? $version : null;
+            return is_string($version) && '' !== $version ? $version : null;
         } catch (\Throwable) {
             return null;
         }
@@ -103,10 +104,10 @@ class ZenmanageServiceProvider extends ServiceProvider
     {
         static $supportedArguments = null;
 
-        if ($supportedArguments === null) {
+        if (null === $supportedArguments) {
             $constructor = (new \ReflectionClass(Config::class))->getConstructor();
 
-            if ($constructor === null) {
+            if (null === $constructor) {
                 $supportedArguments = [];
             } else {
                 $supportedArguments = array_map(
