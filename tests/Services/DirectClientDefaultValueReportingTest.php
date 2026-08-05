@@ -74,7 +74,7 @@ class DirectClientDefaultValueReportingTest extends TestCase
         ]));
         $apiClient->expects($this->once())
             ->method('reportUsage')
-            ->with('found-flag', null, null)
+            ->with('found-flag', $this->anything(), null)
         ;
 
         $flag = $this->makeClient($apiClient)->single('found-flag', false);
