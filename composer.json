@@ -1,6 +1,6 @@
 {
     "name": "zenmanage/zenmanage-laravel",
-    "version": "5.1.1",
+    "version": "5.1.2",
     "description": "Zenmanage API SDK for Laravel",
     "type": "library",
     "license": "MIT",
