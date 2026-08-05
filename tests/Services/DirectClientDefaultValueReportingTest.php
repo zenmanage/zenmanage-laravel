@@ -15,8 +15,10 @@ use Zenmanage\Rules\RuleEngine;
 /**
  * Wires DirectClient to a REAL FlagManager (rather than a mocked
  * FlagManagerInterface, as the rest of this suite uses) to prove the
- * default-value usage-reporting fix from zenmanage-php ^5.1.0 (ZEN-962)
- * actually reaches ApiClient::reportUsage() through the Laravel wrapper.
+ * default-value usage-reporting fix from zenmanage-php ^5.1.2 (ZEN-1110)
+ * actually reaches ApiClient::reportUsage() through the Laravel wrapper,
+ * on every path — including when the flag is found normally, not just
+ * the inline-default/DefaultsCollection fallback paths.
  *
  * @internal
  *
@@ -53,7 +55,7 @@ class DirectClientDefaultValueReportingTest extends TestCase
         $this->assertSame(42, $flag->asNumber());
     }
 
-    public function testSingleDoesNotReportDefaultValueWhenFlagIsFound(): void
+    public function testSingleReportsDefaultValueThroughToApiClientWhenFlagIsFound(): void
     {
         $apiClient = $this->createMock(ApiClientInterface::class);
         $apiClient->method('getRules')->willReturn(new RulesResponse('v1', [
@@ -76,10 +78,40 @@ class DirectClientDefaultValueReportingTest extends TestCase
         // default anonymous/empty context to null before reporting usage.
         $apiClient->expects($this->once())
             ->method('reportUsage')
-            ->with('found-flag', null, null)
+            ->with('found-flag', null, false)
         ;
 
         $flag = $this->makeClient($apiClient)->single('found-flag', false);
+
+        $this->assertTrue($flag->asBool());
+    }
+
+    public function testSingleReportsDefaultsCollectionValueThroughToApiClientWhenFlagIsFound(): void
+    {
+        $apiClient = $this->createMock(ApiClientInterface::class);
+        $apiClient->method('getRules')->willReturn(new RulesResponse('v1', [
+            Flag::fromArray([
+                'version' => 'fla_1',
+                'type' => 'boolean',
+                'key' => 'found-flag',
+                'name' => 'Found Flag',
+                'target' => [
+                    'version' => 'tar_1',
+                    'expired_at' => null,
+                    'published_at' => null,
+                    'scheduled_at' => null,
+                    'value' => ['version' => 'v1', 'value' => ['boolean' => true]],
+                ],
+                'rules' => [],
+            ]),
+        ]));
+        $apiClient->expects($this->once())
+            ->method('reportUsage')
+            ->with('found-flag', null, true)
+        ;
+
+        $defaults = DefaultsCollection::fromArray(['found-flag' => true]);
+        $flag = $this->makeClient($apiClient)->withDefaults($defaults)->single('found-flag');
 
         $this->assertTrue($flag->asBool());
     }
