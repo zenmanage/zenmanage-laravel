@@ -72,6 +72,8 @@ class DirectClientDefaultValueReportingTest extends TestCase
                 'rules' => [],
             ]),
         ]));
+        // No withContext() call is made above, so FlagManager collapses the
+        // default anonymous/empty context to null before reporting usage.
         $apiClient->expects($this->once())
             ->method('reportUsage')
             ->with('found-flag', null, null)
