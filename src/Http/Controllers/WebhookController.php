@@ -28,7 +28,10 @@ class WebhookController
         }
 
         $signatureHeader = $request->header('X-Zenmanage-Signature', '');
-        $signature = true === is_string($signatureHeader) ? $signatureHeader : '';
+        $signature = '';
+        if (true === is_string($signatureHeader)) {
+            $signature = $signatureHeader;
+        }
 
         if (false === SignatureVerifier::verify((string) $request->getContent(), $signature, $this->secret)) {
             return new JsonResponse(['message' => 'Invalid signature.'], 401);
