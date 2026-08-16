@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.3] - 2026-08-16
+
+### Fixed
+- Updated `zenmanage/zenmanage-php` dependency to `^5.1.3`, which fixes `FlagManager::all()` to fall back to the configured `DefaultsCollection` on a per-key basis — previously a `DefaultsCollection` set via `withDefaults()` was silently ignored by `all()`, so a total rule-loading failure returned an empty array instead of the configured defaults. Since `DirectClient::all()` delegates directly to `FlagManager::all()`, this fixes the same gap for Laravel. ([ZEN-1100](https://linear.app/zenmanage/issue/ZEN-1100))
+
 ## [5.1.2] - 2026-08-05
 
 ### Fixed
