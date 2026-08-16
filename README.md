@@ -427,6 +427,24 @@ To wire it up:
 
 On every verified request, the endpoint calls the same `refreshRules()` used above, so your app picks up flag changes immediately instead of on the next cache expiry.
 
+> **Note:** The webhook route is registered on its own, outside `routes/web.php`, so it isn't part of Laravel's `web` middleware group (and its CSRF protection) by default. If your application applies CSRF verification globally, exclude the webhook path explicitly:
+>
+> ```php
+> // Laravel 11+ (bootstrap/app.php)
+> ->withMiddleware(function (Middleware $middleware) {
+>     $middleware->validateCsrfTokens(except: [
+>         'zenmanage/webhook',
+>     ]);
+> })
+> ```
+>
+> ```php
+> // Laravel 10 and below (App\Http\Middleware\VerifyCsrfToken)
+> protected $except = [
+>     'zenmanage/webhook',
+> ];
+> ```
+
 ## Testing
 
 Mock the Zenmanage facade in your tests:
