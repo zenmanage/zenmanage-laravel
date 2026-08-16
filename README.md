@@ -65,6 +65,9 @@ The only required configuration is the Environment Token (server key prefixed wi
 - `cache_directory` - Directory for filesystem cache (optional)
 - `enable_usage_reporting` - Enable automatic usage tracking (default: false)
 - `api_endpoint` - API endpoint URL (default: https://api.zenmanage.com)
+- `webhook.enabled` - Register the built-in webhook route (default: false, see [Webhooks](#webhooks))
+- `webhook.path` - Route path for the webhook endpoint (default: `zenmanage/webhook`)
+- `webhook.secret` - Signing secret used to verify incoming webhook requests
 
 The SDK client metadata is set automatically and is not configurable via environment:
 - `client_agent` is hard-coded to `zenmanage-laravel`
@@ -76,6 +79,9 @@ ZENMANAGE_CACHE_BACKEND=filesystem
 ZENMANAGE_CACHE_TTL=3600
 ZENMANAGE_USAGE_REPORTING=false
 ZENMANAGE_API_ENDPOINT=https://api.zenmanage.com
+ZENMANAGE_WEBHOOK_ENABLED=false
+ZENMANAGE_WEBHOOK_PATH=zenmanage/webhook
+ZENMANAGE_WEBHOOK_SECRET=whsec_sample
 ```
 
 ## Common Use Cases
@@ -401,6 +407,43 @@ use Zenmanage\Laravel\Facades\Zenmanage;
 
 Zenmanage::refreshRules();
 ```
+
+## Webhooks
+
+Instead of waiting for `cache_ttl` to lapse, the package can register a webhook endpoint that a Zenmanage environment webhook calls to immediately refresh cached flag rules. This is **disabled by default** — you opt in with a config flag:
+
+```env
+ZENMANAGE_WEBHOOK_ENABLED=true
+ZENMANAGE_WEBHOOK_SECRET=whsec_your_signing_secret
+```
+
+When `webhook.enabled` is true, the package registers `POST /zenmanage/webhook` (customize the path with `webhook.path` / `ZENMANAGE_WEBHOOK_PATH`). Requests are rejected with a 401 unless they carry a valid `X-Zenmanage-Signature` header, verified against `webhook.secret` — so `webhook.secret` must be set for the endpoint to accept any requests.
+
+To wire it up:
+
+1. Publish the config if you haven't already: `php artisan vendor:publish --tag=config`.
+2. Set `ZENMANAGE_WEBHOOK_ENABLED=true` and `ZENMANAGE_WEBHOOK_SECRET` in your `.env`.
+3. In your Zenmanage dashboard, create an environment webhook pointing at `https://your-app.com/zenmanage/webhook`, and copy its signing secret (prefixed `whsec_`) into `ZENMANAGE_WEBHOOK_SECRET`.
+
+On every verified request, the endpoint calls the same `refreshRules()` used above, so your app picks up flag changes immediately instead of on the next cache expiry.
+
+> **Note:** The webhook route is registered on its own, outside `routes/web.php`, so it isn't part of Laravel's `web` middleware group (and its CSRF protection) by default. If your application applies CSRF verification globally, exclude the webhook path explicitly:
+>
+> ```php
+> // Laravel 11+ (bootstrap/app.php)
+> ->withMiddleware(function (Middleware $middleware) {
+>     $middleware->validateCsrfTokens(except: [
+>         'zenmanage/webhook',
+>     ]);
+> })
+> ```
+>
+> ```php
+> // Laravel 10 and below (App\Http\Middleware\VerifyCsrfToken)
+> protected $except = [
+>     'zenmanage/webhook',
+> ];
+> ```
 
 ## Testing
 

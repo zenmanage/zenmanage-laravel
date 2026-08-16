@@ -77,4 +77,31 @@ class ZenmanageServiceProviderTest extends TestCase
             $this->assertNotSame('', $version);
         }
     }
+
+    public function testPublishedConfigDefaultsWebhookToDisabled(): void
+    {
+        $configContents = file_get_contents(__DIR__.'/../config/zenmanage.php');
+
+        $this->assertIsString($configContents);
+        $this->assertStringContainsString("'enabled' => env('ZENMANAGE_WEBHOOK_ENABLED', false)", $configContents);
+        $this->assertStringContainsString("'secret' => env('ZENMANAGE_WEBHOOK_SECRET')", $configContents);
+    }
+
+    public function testBootOnlyLoadsWebhookRoutesWhenEnabledInConfig(): void
+    {
+        $providerContents = file_get_contents(__DIR__.'/../src/ZenmanageServiceProvider.php');
+
+        $this->assertIsString($providerContents);
+        $this->assertStringContainsString("config('zenmanage.webhook.enabled', false)", $providerContents);
+        $this->assertStringContainsString("\$this->loadRoutesFrom(__DIR__.'/../routes/webhook.php')", $providerContents);
+    }
+
+    public function testRegisterBindsWebhookControllerWithConfiguredSecret(): void
+    {
+        $providerContents = file_get_contents(__DIR__.'/../src/ZenmanageServiceProvider.php');
+
+        $this->assertIsString($providerContents);
+        $this->assertStringContainsString('Http\Controllers\WebhookController::class', $providerContents);
+        $this->assertStringContainsString("config('zenmanage.webhook.secret')", $providerContents);
+    }
 }

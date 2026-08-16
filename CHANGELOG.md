@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.0] - 2026-08-16
+
+### Added
+- Built-in webhook endpoint (`POST /zenmanage/webhook` by default) that a Zenmanage environment webhook can call to immediately refresh cached flag rules instead of waiting for `cache_ttl` to lapse. Disabled by default — enable it with `webhook.enabled` (`ZENMANAGE_WEBHOOK_ENABLED`) and configure `webhook.secret` (`ZENMANAGE_WEBHOOK_SECRET`) to verify the `X-Zenmanage-Signature` header on incoming requests. See the README's Webhooks section. ([ZEN-1072](https://linear.app/zenmanage/issue/ZEN-1072))
+
 ## [5.1.3] - 2026-08-16
 
 ### Fixed
