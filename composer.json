@@ -1,6 +1,6 @@
 {
     "name": "zenmanage/zenmanage-laravel",
-    "version": "5.1.3",
+    "version": "5.2.0",
     "description": "Zenmanage API SDK for Laravel",
     "type": "library",
     "license": "MIT",
@@ -19,7 +19,8 @@
         "phpunit/php-code-coverage": "^10.0",
         "phpstan/phpstan": "^1.10",
         "friendsofphp/php-cs-fixer": "^3.0",
-        "illuminate/support": "^10.0|^11.0|^12.0"
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "illuminate/http": "^10.0|^11.0|^12.0"
     },
     "autoload": {
         "psr-4": {

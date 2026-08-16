@@ -66,4 +66,27 @@ return [
     |
     */
     'api_endpoint' => env('ZENMANAGE_API_ENDPOINT', 'https://api.zenmanage.com'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Webhook
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, the package registers a route that a Zenmanage environment
+    | webhook can call to immediately refresh cached flag rules instead of
+    | waiting for the cache TTL to lapse. Disabled by default — set `enabled`
+    | to true and configure a webhook in your Zenmanage dashboard pointing at
+    | this app's `path` to turn it on.
+    |
+    | `secret` should match the signing secret shown when you create the
+    | webhook (prefixed `whsec_`) so incoming requests can be verified via
+    | the `X-Zenmanage-Signature` header. Requests are rejected unless a
+    | secret is configured.
+    |
+    */
+    'webhook' => [
+        'enabled' => env('ZENMANAGE_WEBHOOK_ENABLED', false),
+        'path' => env('ZENMANAGE_WEBHOOK_PATH', 'zenmanage/webhook'),
+        'secret' => env('ZENMANAGE_WEBHOOK_SECRET'),
+    ],
 ];

@@ -38,6 +38,12 @@ class ZenmanageServiceProvider extends ServiceProvider
         $this->publishes([$configPath => config_path('zenmanage.php')], 'config');
         $this->mergeConfigFrom($configPath, 'zenmanage');
 
+        // The webhook route is opt-in: only register it when the published
+        // config has `webhook.enabled` turned on.
+        if (true === (bool) config('zenmanage.webhook.enabled', false)) {
+            $this->loadRoutesFrom(__DIR__.'/../routes/webhook.php');
+        }
+
         // Register the Zenmanage facade alias
         if (true === class_exists(AliasLoader::class)) {
             AliasLoader::getInstance()->alias(
@@ -79,6 +85,11 @@ class ZenmanageServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(FlagManagerInterface::class, fn () => $this->app->make(Zenmanage::class)->flags());
+
+        $this->app->bind(Http\Controllers\WebhookController::class, fn () => new Http\Controllers\WebhookController(
+            $this->app->make(Contracts\Client::class),
+            (string) (config('zenmanage.webhook.secret') ?? '')
+        ));
     }
 
     private function resolveLaravelSdkVersion(): ?string
