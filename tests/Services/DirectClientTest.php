@@ -399,6 +399,39 @@ class DirectClientTest extends TestCase
         $this->assertSame($keys, $returnedKeys);
     }
 
+    public function testWithDefaultsChainDelegatesAll(): void
+    {
+        $defaults = new DefaultsCollection();
+        $defaults->set('admin-email-address', 'admin@zenmanage.com');
+        $defaults->set('allow-account-creation', true);
+
+        // Simulates FlagManager::all() falling back to the configured
+        // DefaultsCollection (e.g. after a rule-loading failure) — DirectClient
+        // must surface those default-derived flags unchanged, not swallow them.
+        $defaultDerivedFlags = [
+            $this->makeStringFlag('admin-email-address', 'admin@zenmanage.com'),
+            $this->makeBoolFlag('allow-account-creation', true),
+        ];
+
+        $defaultsManager = $this->createMock(FlagManagerInterface::class);
+        $defaultsManager->expects($this->once())
+            ->method('all')
+            ->willReturn($defaultDerivedFlags)
+        ;
+
+        $this->flagManagerMock->expects($this->once())
+            ->method('withDefaults')
+            ->with($defaults)
+            ->willReturn($defaultsManager)
+        ;
+
+        $flags = $this->client->withDefaults($defaults)->all();
+
+        $this->assertSame($defaultDerivedFlags, $flags);
+        $this->assertSame('admin@zenmanage.com', $flags[0]->asString());
+        $this->assertTrue($flags[1]->asBool());
+    }
+
     // =========================================================================
     // Cache behavior: refreshRules flips evaluated value
     // =========================================================================
