@@ -187,6 +187,9 @@ if ($advancedReports) {
 $apiTimeout = Zenmanage::single('api-timeout', 5000)->asNumber();
 $maxUploadSize = Zenmanage::single('max-upload-mb', 10)->asNumber();
 $welcomeMessage = Zenmanage::single('welcome-text', 'Welcome!')->asString();
+
+// Structured (JSON) configuration
+$themeConfig = Zenmanage::single('theme-config', ['mode' => 'light'])->asJson();
 ```
 
 ### Kill Switch for Problem Features
@@ -360,6 +363,8 @@ foreach ($results as $flag) {
         $value = $flag->asBool();
     } elseif ($flag->getType() === 'number') {
         $value = $flag->asNumber();
+    } elseif ($flag->getType() === 'json') {
+        $value = $flag->asJson();
     } else {
         $value = $flag->asString();
     }
@@ -380,7 +385,11 @@ if ($flag->isEnabled()) {
 $boolValue = $flag->asBool();
 $stringValue = $flag->asString();
 $numberValue = $flag->asNumber();
+$jsonValue = $flag->asJson();
 ```
+
+> [!TIP]
+> `asBool()`/`asString()`/`asNumber()`/`asJson()` never throw when called on the "wrong" type — each falls back to a safe zero value instead. See zenmanage-php's README for the full cross-type coercion reference, which this Laravel wrapper inherits unchanged since `DirectClient` passes `Flag` objects through as-is.
 
 ## Reporting Feature Flag Usage
 

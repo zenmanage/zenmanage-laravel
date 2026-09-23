@@ -27,6 +27,9 @@ echo '   Number default: '.$missingNumber->asNumber()."\n";
 $missingBoolean = Zenmanage::single('nonexistent-boolean-flag', true);
 echo '   Boolean default (isEnabled): '.($missingBoolean->isEnabled() ? 'enabled' : 'disabled')."\n\n";
 
+$missingJson = Zenmanage::single('nonexistent-json-flag', ['theme' => 'dark', 'limits' => [1, 2, 3]]);
+echo '   JSON default: '.json_encode($missingJson->asJson())."\n\n";
+
 // DefaultsCollection applied to the facade instance
 echo "2. Defaults Collection\n\n";
 
