@@ -40,8 +40,14 @@ echo "   Number Flag: {$numberFlag->asNumber()}\n";
 $limitFlag = Zenmanage::single('example-limit-flag');
 echo "   Limit Flag: {$limitFlag->asNumber()}\n\n";
 
+// JSON flags
+echo "4. JSON Flags\n\n";
+
+$jsonFlag = Zenmanage::single('example-json-flag');
+echo '   JSON Flag: '.json_encode($jsonFlag->asJson())."\n\n";
+
 // Get all flags
-echo "4. Retrieving All Flags\n\n";
+echo "5. Retrieving All Flags\n\n";
 
 $flags = Zenmanage::all();
 echo '   Total flags: '.count($flags)."\n\n";
@@ -51,6 +57,8 @@ foreach ($flags as $flag) {
 
     if ('boolean' === $flag->getType()) {
         echo $flag->isEnabled() ? 'enabled' : 'disabled';
+    } elseif ('json' === $flag->getType()) {
+        echo json_encode($flag->asJson());
     } else {
         echo $flag->getValue();
     }
