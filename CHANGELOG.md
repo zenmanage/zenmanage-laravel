@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Requires `zenmanage/zenmanage-php` ^5.2.0, which adds the `json` flag type. `Flag::asJson()` (and array/object defaults typed as `json` instead of stringified) now work through this Laravel wrapper — `DirectClient` and the `Zenmanage` facade already pass through `Flag` objects untouched, so no wrapper-specific code was needed. See zenmanage-php's README for the full cross-type coercion reference. ([ZEN-1383](https://linear.app/zenmanage/issue/ZEN-1383))
 
+## [5.2.1] - 2026-09-23
+
+### Fixed
+- Updated `zenmanage/zenmanage-php` dependency to `^5.1.4`, which makes flag `type` parsing tolerant of an unrecognized flag type (e.g. a future `json` type) — degrading it to the caller's default instead of a thrown exception or a mis-parsed value. Since `DirectClient` delegates directly to `FlagManager`, this carries the same fix through to Laravel. ([ZEN-1667](https://linear.app/zenmanage/issue/ZEN-1667))
+
 ## [5.2.0] - 2026-08-16
 
 ### Added
