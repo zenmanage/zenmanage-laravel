@@ -495,7 +495,7 @@ class DirectClientTest extends TestCase
         ;
 
         $this->client->reportUsage('parity-bool-on', null);
-        $this->addToAssertionCount(1);
+        $this->assertTrue(true); // If no exception, test passes
     }
 
     // =========================================================================
