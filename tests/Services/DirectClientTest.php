@@ -175,6 +175,20 @@ class DirectClientTest extends TestCase
         $this->assertSame(1500.0, (float) $flag->asNumber());
     }
 
+    public function testSinglePassesThroughJsonValue(): void
+    {
+        $this->flagManagerMock->expects($this->once())
+            ->method('single')
+            ->with('parity-json-config', [])
+            ->willReturn($this->makeJsonFlag('parity-json-config', ['theme' => 'dark', 'limits' => [1, 2, 3]]))
+        ;
+
+        $flag = $this->client->single('parity-json-config', []);
+
+        $this->assertSame('json', $flag->getType());
+        $this->assertSame(['theme' => 'dark', 'limits' => [1, 2, 3]], $flag->asJson());
+    }
+
     // =========================================================================
     // Default fallback
     // =========================================================================
@@ -706,6 +720,17 @@ class DirectClientTest extends TestCase
         $target = new Target('tar_1', null, null, null, $ruleValue);
 
         return new Flag('fla_1', 'number', $key, $key, $target, []);
+    }
+
+    /**
+     * @param array<mixed> $value
+     */
+    private function makeJsonFlag(string $key, array $value): Flag
+    {
+        $ruleValue = new RuleValue('v1', ['json' => $value]);
+        $target = new Target('tar_1', null, null, null, $ruleValue);
+
+        return new Flag('fla_1', 'json', $key, $key, $target, []);
     }
 
     // -------------------------------------------------------------------------

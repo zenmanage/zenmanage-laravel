@@ -116,6 +116,50 @@ class DirectClientDefaultValueReportingTest extends TestCase
         $this->assertTrue($flag->asBool());
     }
 
+    public function testSingleReportsJsonDefaultValueThroughToApiClient(): void
+    {
+        $apiClient = $this->createMock(ApiClientInterface::class);
+        $apiClient->method('getRules')->willReturn(new RulesResponse('v1', []));
+        $apiClient->expects($this->once())
+            ->method('reportUsage')
+            ->with('missing-json-flag', null, ['theme' => 'dark'])
+        ;
+
+        $flag = $this->makeClient($apiClient)->single('missing-json-flag', ['theme' => 'dark']);
+
+        $this->assertSame('json', $flag->getType());
+        $this->assertSame(['theme' => 'dark'], $flag->asJson());
+    }
+
+    public function testSingleReportsDefaultValueThroughToApiClientWhenJsonFlagIsFound(): void
+    {
+        $apiClient = $this->createMock(ApiClientInterface::class);
+        $apiClient->method('getRules')->willReturn(new RulesResponse('v1', [
+            Flag::fromArray([
+                'version' => 'fla_1',
+                'type' => 'json',
+                'key' => 'found-json-flag',
+                'name' => 'Found JSON Flag',
+                'target' => [
+                    'version' => 'tar_1',
+                    'expired_at' => null,
+                    'published_at' => null,
+                    'scheduled_at' => null,
+                    'value' => ['version' => 'v1', 'value' => ['json' => ['limit' => 10]]],
+                ],
+                'rules' => [],
+            ]),
+        ]));
+        $apiClient->expects($this->once())
+            ->method('reportUsage')
+            ->with('found-json-flag', null, null)
+        ;
+
+        $flag = $this->makeClient($apiClient)->single('found-json-flag');
+
+        $this->assertSame(['limit' => 10], $flag->asJson());
+    }
+
     private function makeClient(ApiClientInterface $apiClient): DirectClient
     {
         $flagManager = new FlagManager(
