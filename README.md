@@ -1,6 +1,6 @@
 # Zenmanage Laravel SDK
 
-[![Build Status](https://github.com/zenmanage/zenmanage-laravel/actions/workflows/ci.yml/badge.svg)](https://github.com/zenmanage/zenmanage-laravel) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ac1bf5b11c1a41f0ab2acb75d2c49334)](https://app.codacy.com/gh/zenmanage/zenmanage-laravel/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![CI](https://github.com/zenmanage/zenmanage-laravel/actions/workflows/ci.yml/badge.svg)](https://github.com/zenmanage/zenmanage-laravel/actions/workflows/ci.yml) [![Version](https://img.shields.io/packagist/v/zenmanage/zenmanage-laravel)](https://packagist.org/packages/zenmanage/zenmanage-laravel) [![License](https://img.shields.io/github/license/zenmanage/zenmanage-laravel)](LICENSE) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ac1bf5b11c1a41f0ab2acb75d2c49334)](https://app.codacy.com/gh/zenmanage/zenmanage-laravel/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 Add feature flags to your Laravel application in minutes. Control feature rollouts, A/B test, and manage configurations without deploying code.
 
