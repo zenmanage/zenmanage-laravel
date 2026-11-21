@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Zenmanage\Api\ApiClientInterface;
 use Zenmanage\Api\Response\RulesResponse;
@@ -21,9 +22,8 @@ use Zenmanage\Rules\RuleEngine;
  * the inline-default/DefaultsCollection fallback paths.
  *
  * @internal
- *
- * @covers \Zenmanage\Laravel\Services\DirectClient
  */
+#[CoversClass(DirectClient::class)]
 class DirectClientDefaultValueReportingTest extends TestCase
 {
     public function testSingleReportsInlineDefaultValueThroughToApiClient(): void

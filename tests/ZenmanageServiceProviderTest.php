@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Contracts\Foundation\Application;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Zenmanage\Laravel\Contracts\Client;
 use Zenmanage\Laravel\Services\DirectClient;
@@ -10,9 +11,8 @@ use Zenmanage\Laravel\ZenmanageServiceProvider;
 
 /**
  * @internal
- *
- * @covers \Zenmanage\Laravel\ZenmanageServiceProvider
  */
+#[CoversClass(ZenmanageServiceProvider::class)]
 class ZenmanageServiceProviderTest extends TestCase
 {
     public function testRegisterBindsZenmanageToContainer(): void

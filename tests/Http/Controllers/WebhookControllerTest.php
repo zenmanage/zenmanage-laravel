@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Zenmanage\Laravel\Contracts\Client;
 use Zenmanage\Laravel\Http\Controllers\WebhookController;
 
 /**
  * @internal
- *
- * @covers \Zenmanage\Laravel\Http\Controllers\WebhookController
  */
+#[CoversClass(WebhookController::class)]
 class WebhookControllerTest extends TestCase
 {
     private const SECRET = 'whsec_test_secret';

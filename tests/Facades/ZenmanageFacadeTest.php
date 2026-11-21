@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Zenmanage\Laravel\Contracts\Client;
 use Zenmanage\Laravel\Facades\Zenmanage;
 
 /**
  * @internal
- *
- * @covers \Zenmanage\Laravel\Facades\Zenmanage
  */
+#[CoversClass(Zenmanage::class)]
 class ZenmanageFacadeTest extends TestCase
 {
     public function testGetFacadeAccessorReturnsClientClass(): void

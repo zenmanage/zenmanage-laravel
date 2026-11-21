@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Zenmanage\Flags\Context\Attribute;
 use Zenmanage\Flags\Context\Context;
@@ -18,9 +19,8 @@ use Zenmanage\Rules\RuleValue;
  * work correctly through the Laravel DirectClient facade layer.
  *
  * @internal
- *
- * @covers \Zenmanage\Laravel\Services\DirectClient
  */
+#[CoversClass(DirectClient::class)]
 class DirectClientRolloutTest extends TestCase
 {
     private FlagManagerInterface $flagManagerMock;
