@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Zenmanage\Laravel\Webhook\SignatureVerifier;
 
 /**
  * @internal
- *
- * @covers \Zenmanage\Laravel\Webhook\SignatureVerifier
  */
+#[CoversClass(SignatureVerifier::class)]
 class SignatureVerifierTest extends TestCase
 {
     private const SECRET = 'whsec_test_secret';
